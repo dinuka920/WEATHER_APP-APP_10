@@ -5,18 +5,15 @@ import 'package:weather_app/services/get_location_service.dart';
 
 class WeatherServices {
   // https://api.openweathermap.org/data/2.5/weather?q=London&appid=5847cdd2ed710d89acc48a13162bc49f&units=metric
-
+  static const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
   final String apiKey;
 
   WeatherServices({required this.apiKey});
 
-  static const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
-
   // methode to get a weather data from the city name
   Future<WeatherModel> getWeatherDataFromCityName(String cityName) async {
     try {
-      final String url = "$BASE_URL?q=$cityName&appid=$apiKey&units=metric";
-
+      final url = "$BASE_URL?q=$cityName&appid=$apiKey&units=metric";
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
@@ -33,8 +30,8 @@ class WeatherServices {
 
   // methode to get a weather data from the currnt location
   Future<WeatherModel> getWeatherDataFromCurrentLocation() async {
-    final location = GetLocationService();
-    final cityName = location.getCityNameFromCurrentlocation();
+    final location = Location();
+    final cityName = await location.getLocation();
 
     try {
       final url = "$BASE_URL?q=$cityName&appid=$apiKey&units=metric";
